@@ -92,4 +92,8 @@ async def on_message(msg: discord.Message):
     await msg.channel.send("### Traceback: \n" + "\n- ".join(response["test_logs"]))
     await msg.channel.send(f"### Final score: {response['score']}")
 
-    scores[author] = scores.get(author, 0) + response['score']
+    # Update the score only when necessary
+    if author not in scores:
+        scores[author] = 0
+    elif scores[author] <= response['score']:
+        scores[author] = response['score']
